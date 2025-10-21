@@ -81,12 +81,20 @@ export default async function DashboardPage({
                 Welcome to Whop CRM - {company.name}
               </p>
             </div>
-            <Link
-              href={`/dashboard/${companyId}/members`}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-            >
-              View All Members →
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                href={`/dashboard/${companyId}/members`}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              >
+                View All Members →
+              </Link>
+              <Link
+                href={`/dashboard/${companyId}/segments`}
+                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
+              >
+                Segments
+              </Link>
+            </div>
           </div>
         </div>
 
