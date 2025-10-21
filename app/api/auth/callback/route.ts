@@ -81,8 +81,8 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Redirect to dashboard
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    // Redirect to dashboard with company ID
+    return NextResponse.redirect(new URL(`/dashboard/${companyData.id}`, request.url));
   } catch (error) {
     console.error("OAuth callback error:", error);
     return NextResponse.json(

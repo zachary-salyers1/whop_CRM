@@ -1,9 +1,15 @@
 import { prisma } from "@/lib/prisma";
 
-export default async function DashboardPage() {
-  // Get company stats
-  const company = await prisma.company.findFirst({
-    where: { isActive: true },
+export default async function DashboardPage({
+  params,
+}: {
+  params: Promise<{ companyId: string }>;
+}) {
+  const { companyId } = await params;
+
+  // Get company by Whop company ID
+  const company = await prisma.company.findUnique({
+    where: { whopCompanyId: companyId },
   });
 
   if (!company) {
