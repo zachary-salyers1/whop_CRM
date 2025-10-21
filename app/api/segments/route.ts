@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
         name,
         description: description || "",
         companyId,
-        filterCriteria: filters,
+        filters: filters,
         memberCount,
         totalMrr,
       },

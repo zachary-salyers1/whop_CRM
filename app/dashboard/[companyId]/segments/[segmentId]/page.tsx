@@ -67,7 +67,7 @@ export default async function SegmentDetailPage({
   }
 
   // Build where clause from saved filters
-  const filters = segment.filterCriteria as Filter[];
+  const filters = segment.filters as Filter[];
   const whereClause = buildWhereClause(filters);
 
   const members = await prisma.member.findMany({
