@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Company/Business that installed the app
+model Company {
+  id                String   @id @default(cuid())
+  whopCompanyId     String   @unique // biz_xxx from Whop
+  name              String
+  email             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  lastSyncedAt      DateTime?
+
+  // OAuth tokens
+  accessToken       String?
+  refreshToken      String?
+  tokenExpiresAt    DateTime?
+
+  // App installation data
+  installedAt       DateTime @default(now())
+  isActive          Boolean  @default(true)
+
+  // Relations
+  members           Member[]
+  segments          Segment[]
+  automations       Automation[]
+  notes             Note[]
+  tags              Tag[]
+
+  @@index([whopCompanyId])
+}
+
+// Member/Customer data
+model Member {
+  id                String   @id @default(cuid())
+  whopUserId        String   @unique // user_xxx from Whop
+  email             String
+  username          String?
+  profilePicUrl     String?
+
+  companyId         String
+  company           Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  // Subscription data
+  status            String   // active, cancelled, past_due, etc.
+  currentPlan       String?
+  planId            String?  // Whop plan ID
+
+  // Financial metrics
+  totalRevenue      Float    @default(0)
+  monthlyRevenue    Float    @default(0)
+  lifetimeValue     Float    @default(0)
+
+  // Engagement metrics
+  lastSeenAt        DateTime?
+  firstJoinedAt     DateTime @default(now())
+  cancelledAt       DateTime?
+
+  // Risk scoring
+  churnRisk         String   @default("low") // low, medium, high
+  engagementScore   Int      @default(0)     // 0-100
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  memberships       Membership[]
+  events            Event[]
+  notes             Note[]
+  tags              MemberTag[]
+  segmentMembers    SegmentMember[]
+
+  @@index([companyId])
+  @@index([whopUserId])
+  @@index([email])
+  @@index([status])
+}
+
+// Membership history (tracks subscription changes over time)
+model Membership {
+  id                String   @id @default(cuid())
+  whopMembershipId  String   @unique // membership_xxx from Whop
+
+  memberId          String
+  member            Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  planId            String
+  planName          String
+  status            String
+
+  price             Float
+  currency          String   @default("usd")
+  interval          String   // month, year, lifetime
+
+  startedAt         DateTime
+  renewsAt          DateTime?
+  cancelledAt       DateTime?
+  expiresAt         DateTime?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([memberId])
+  @@index([status])
+  @@index([startedAt])
+}
+
+// Event timeline for member actions
+model Event {
+  id          String   @id @default(cuid())
+  type        String   // subscription_created, subscription_cancelled, payment_succeeded, etc.
+
+  memberId    String
+  member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  data        Json?    // Store webhook payload or event metadata
+
+  occurredAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  @@index([memberId])
+  @@index([type])
+  @@index([occurredAt])
+}
+
+// Segments for grouping members
+model Segment {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  // Segment configuration
+  filters     Json     // Store filter criteria
+  isTemplate  Boolean  @default(false) // Pre-built templates vs custom
+
+  // Computed stats
+  memberCount Int      @default(0)
+  totalMrr    Float    @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  members     SegmentMember[]
+
+  @@index([companyId])
+}
+
+// Many-to-many relation between segments and members
+model SegmentMember {
+  id         String   @id @default(cuid())
+
+  segmentId  String
+  segment    Segment  @relation(fields: [segmentId], references: [id], onDelete: Cascade)
+
+  memberId   String
+  member     Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  addedAt    DateTime @default(now())
+
+  @@unique([segmentId, memberId])
+  @@index([segmentId])
+  @@index([memberId])
+}
+
+// Notes attached to members
+model Note {
+  id         String   @id @default(cuid())
+  content    String
+
+  memberId   String
+  member     Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  createdBy  String?  // user_xxx who created the note
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([memberId])
+  @@index([companyId])
+}
+
+// Tags for organizing members
+model Tag {
+  id         String   @id @default(cuid())
+  name       String
+  color      String?  // Hex color for UI
+
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+
+  members    MemberTag[]
+
+  @@unique([companyId, name])
+  @@index([companyId])
+}
+
+// Many-to-many relation between tags and members
+model MemberTag {
+  id        String   @id @default(cuid())
+
+  tagId     String
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  addedAt   DateTime @default(now())
+  addedBy   String?  // user_xxx who added the tag
+
+  @@unique([tagId, memberId])
+  @@index([tagId])
+  @@index([memberId])
+}
+
+// Automation rules (WHEN/THEN)
+model Automation {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  // Rule configuration
+  trigger     Json     // WHEN conditions
+  actions     Json     // THEN actions
+
+  isActive    Boolean  @default(true)
+
+  // Stats
+  runCount    Int      @default(0)
+  lastRunAt   DateTime?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([companyId])
+  @@index([isActive])
+}

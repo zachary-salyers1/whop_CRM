@@ -11,16 +11,20 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@prisma/client": "^6.17.1",
 		"@vercel/functions": "^2.0.3",
 		"@whop/api": "^0.0.29",
 		"@whop/react": "0.2.14",
+		"bcrypt": "^6.0.0",
 		"next": "15.3.2",
+		"prisma": "^6.17.1",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@tailwindcss/postcss": "^4",
+		"@types/bcrypt": "^6.0.0",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
