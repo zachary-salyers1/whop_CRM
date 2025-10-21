@@ -18,30 +18,34 @@ export async function POST(request: NextRequest) {
       where: { id: companyId },
     });
 
-    if (!company || !company.accessToken) {
+    if (!company) {
       return NextResponse.json(
-        { error: "Company not found or not authenticated" },
+        { error: "Company not found" },
         { status: 404 }
       );
     }
 
-    // Fetch all memberships from Whop API directly
+    // Use Whop SDK to fetch memberships
+    // The SDK uses the API key from env variables
+    const sdk = whopSdk.withCompany(company.whopCompanyId);
+
     let page = 1;
     let hasMore = true;
     let totalSynced = 0;
 
     while (hasMore) {
+      // Fetch directly from API using the configured API key
       const response = await fetch(
-        `https://api.whop.com/api/v5/memberships?page=${page}&per=100&company_id=${company.whopCompanyId}`,
+        `https://api.whop.com/api/v5/memberships?page=${page}&per=100`,
         {
           headers: {
-            Authorization: `Bearer ${company.accessToken}`,
+            Authorization: `Bearer ${process.env.WHOP_API_KEY}`,
           },
         }
       );
 
       if (!response.ok) {
-        console.error("Failed to fetch memberships from Whop");
+        console.error("Failed to fetch memberships from Whop:", await response.text());
         break;
       }
 
