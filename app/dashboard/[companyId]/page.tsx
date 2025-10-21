@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { SyncButton } from "./SyncButton";
+import Link from "next/link";
 
 export default async function DashboardPage({
   params,
@@ -73,10 +74,20 @@ export default async function DashboardPage({
     <div className="min-h-screen bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-          <p className="text-gray-400 mt-2">
-            Welcome to Whop CRM - {company.name}
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+              <p className="text-gray-400 mt-2">
+                Welcome to Whop CRM - {company.name}
+              </p>
+            </div>
+            <Link
+              href={`/dashboard/${companyId}/members`}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            >
+              View All Members →
+            </Link>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
