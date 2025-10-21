@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { SyncButton } from "./SyncButton";
 
 export default async function DashboardPage({
   params,
@@ -7,7 +8,6 @@ export default async function DashboardPage({
 }) {
   const { companyId } = await params;
 
-  // Get company by Whop company ID
   const company = await prisma.company.findUnique({
     where: { whopCompanyId: companyId },
   });
@@ -17,17 +17,19 @@ export default async function DashboardPage({
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            No Active Installation
+            Initializing Your Whop CRM
           </h1>
           <p className="text-gray-600 mb-6">
-            Please install the app first to access the dashboard.
+            Setting up your company data...
           </p>
-          <a
-            href="/api/auth/install"
-            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
-          >
-            Install App
-          </a>
+          <form action="/api/init" method="POST">
+            <button
+              type="submit"
+              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+            >
+              Initialize CRM
+            </button>
+          </form>
         </div>
       </div>
     );
@@ -68,102 +70,84 @@ export default async function DashboardPage({
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+          <p className="text-gray-400 mt-2">
             Welcome to Whop CRM - {company.name}
           </p>
         </div>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">
+          <div className="bg-gray-900 border border-gray-800 rounded-lg shadow p-6">
+            <h3 className="text-sm font-medium text-gray-400 mb-2">
               Total Members
             </h3>
-            <p className="text-3xl font-bold text-gray-900">{totalMembers}</p>
+            <p className="text-3xl font-bold text-white">{totalMembers}</p>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">
+          <div className="bg-gray-900 border border-gray-800 rounded-lg shadow p-6">
+            <h3 className="text-sm font-medium text-gray-400 mb-2">
               Active Members
             </h3>
-            <p className="text-3xl font-bold text-green-600">{activeMembers}</p>
+            <p className="text-3xl font-bold text-green-400">{activeMembers}</p>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">
+          <div className="bg-gray-900 border border-gray-800 rounded-lg shadow p-6">
+            <h3 className="text-sm font-medium text-gray-400 mb-2">
               Total Revenue
             </h3>
-            <p className="text-3xl font-bold text-gray-900">
+            <p className="text-3xl font-bold text-white">
               ${(totalRevenue._sum.totalRevenue || 0).toFixed(2)}
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">MRR</h3>
-            <p className="text-3xl font-bold text-gray-900">
+          <div className="bg-gray-900 border border-gray-800 rounded-lg shadow p-6">
+            <h3 className="text-sm font-medium text-gray-400 mb-2">MRR</h3>
+            <p className="text-3xl font-bold text-white">
               ${(totalRevenue._sum.monthlyRevenue || 0).toFixed(2)}
             </p>
           </div>
         </div>
 
-        {/* Sync Button */}
         {!company.lastSyncedAt && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
-            <h3 className="text-sm font-medium text-yellow-800 mb-2">
+          <div className="bg-yellow-900 border border-yellow-700 rounded-lg p-4 mb-8">
+            <h3 className="text-sm font-medium text-yellow-200 mb-2">
               Initial Sync Required
             </h3>
-            <p className="text-sm text-yellow-700 mb-4">
+            <p className="text-sm text-yellow-300 mb-4">
               You haven't synced your member data yet. Click below to import your
               existing members from Whop.
             </p>
-            <button
-              onClick={async () => {
-                const response = await fetch("/api/sync", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ companyId: company.id }),
-                });
-                if (response.ok) {
-                  window.location.reload();
-                }
-              }}
-              className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700"
-            >
-              Sync Members Now
-            </button>
+            <SyncButton companyId={company.id} />
           </div>
         )}
 
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">
+        <div className="bg-gray-900 border border-gray-800 rounded-lg shadow">
+          <div className="px-6 py-4 border-b border-gray-800">
+            <h2 className="text-lg font-semibold text-white">
               Recent Activity
             </h2>
           </div>
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-gray-800">
             {recentEvents.length === 0 ? (
-              <div className="px-6 py-8 text-center text-gray-500">
+              <div className="px-6 py-8 text-center text-gray-400">
                 No activity yet
               </div>
             ) : (
               recentEvents.map((event) => (
-                <div key={event.id} className="px-6 py-4 hover:bg-gray-50">
+                <div key={event.id} className="px-6 py-4 hover:bg-gray-800">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-white">
                         {event.member.email}
                       </p>
-                      <p className="text-sm text-gray-500 capitalize">
+                      <p className="text-sm text-gray-400 capitalize">
                         {event.type.replace("_", " ")}
                       </p>
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-400">
                       {new Date(event.occurredAt).toLocaleDateString()}
                     </div>
                   </div>
@@ -173,9 +157,8 @@ export default async function DashboardPage({
           </div>
         </div>
 
-        {/* Last Synced */}
         {company.lastSyncedAt && (
-          <div className="mt-4 text-sm text-gray-500 text-center">
+          <div className="mt-4 text-sm text-gray-400 text-center">
             Last synced: {new Date(company.lastSyncedAt).toLocaleString()}
           </div>
         )}
