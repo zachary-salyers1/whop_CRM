@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { TagManager } from "./TagManager";
+import { NoteForm } from "./NoteForm";
+import { NotesList } from "./NotesList";
 
 export default async function MemberProfilePage({
   params,
@@ -68,7 +71,7 @@ export default async function MemberProfilePage({
                 {member.username || "No Username"}
               </h1>
               <p className="text-gray-400 mt-1">{member.email}</p>
-              <div className="flex gap-2 mt-3">
+              <div className="flex gap-2 mt-3 items-center">
                 <span
                   className={`px-3 py-1 text-sm font-semibold rounded-full ${
                     member.status === "active"
@@ -80,18 +83,11 @@ export default async function MemberProfilePage({
                 >
                   {member.status}
                 </span>
-                {member.tags.map((memberTag) => (
-                  <span
-                    key={memberTag.id}
-                    className="px-3 py-1 text-sm rounded-full bg-gray-800 text-gray-300 border border-gray-700"
-                    style={{
-                      borderColor: memberTag.tag.color || undefined,
-                      color: memberTag.tag.color || undefined,
-                    }}
-                  >
-                    {memberTag.tag.name}
-                  </span>
-                ))}
+                <TagManager
+                  memberId={member.id}
+                  companyId={company.id}
+                  initialTags={member.tags}
+                />
               </div>
             </div>
           </div>
@@ -222,22 +218,11 @@ export default async function MemberProfilePage({
             {/* Notes */}
             <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
               <h2 className="text-lg font-semibold text-white mb-4">Notes</h2>
-              <div className="space-y-4">
-                {member.notes.length === 0 ? (
-                  <p className="text-sm text-gray-400">No notes yet</p>
-                ) : (
-                  member.notes.map((note) => (
-                    <div
-                      key={note.id}
-                      className="border border-gray-800 rounded p-4"
-                    >
-                      <p className="text-sm text-white">{note.content}</p>
-                      <div className="text-xs text-gray-500 mt-2">
-                        {new Date(note.createdAt).toLocaleString()}
-                      </div>
-                    </div>
-                  ))
-                )}
+              <div className="space-y-4 mb-6">
+                <NoteForm memberId={member.id} companyId={company.id} />
+              </div>
+              <div className="border-t border-gray-800 pt-6">
+                <NotesList notes={member.notes} memberId={member.id} />
               </div>
             </div>
 
