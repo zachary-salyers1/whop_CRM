@@ -3,6 +3,7 @@ import { makeWebhookValidator } from "@whop/api";
 import type { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { executeAutomations } from "@/lib/automationEngine";
+import { updateMemberInsights } from "@/lib/aiInsights";
 
 const validateWebhook = makeWebhookValidator({
 	webhookSecret: process.env.WHOP_WEBHOOK_SECRET ?? "fallback",
@@ -130,6 +131,9 @@ async function handleMembershipCreated(data: any) {
 		triggerType: "membership_created",
 		data,
 	});
+
+	// Update AI insights
+	await updateMemberInsights(member.id);
 }
 
 async function handleMembershipCancelled(data: any) {
@@ -176,6 +180,9 @@ async function handleMembershipCancelled(data: any) {
 		triggerType: "membership_cancelled",
 		data,
 	});
+
+	// Update AI insights
+	await updateMemberInsights(member.id);
 }
 
 async function handlePaymentSucceeded(data: any) {
@@ -215,6 +222,9 @@ async function handlePaymentSucceeded(data: any) {
 		triggerType: "payment_succeeded",
 		data,
 	});
+
+	// Update AI insights
+	await updateMemberInsights(member.id);
 }
 
 async function handlePaymentFailed(data: any) {
@@ -253,4 +263,7 @@ async function handlePaymentFailed(data: any) {
 		triggerType: "payment_failed",
 		data,
 	});
+
+	// Update AI insights
+	await updateMemberInsights(member.id);
 }

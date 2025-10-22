@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { TagManager } from "./TagManager";
 import { NoteForm } from "./NoteForm";
 import { NotesList } from "./NotesList";
+import AIInsights from "./AIInsights";
 
 export default async function MemberProfilePage({
   params,
@@ -91,6 +92,11 @@ export default async function MemberProfilePage({
               </div>
             </div>
           </div>
+        </div>
+
+        {/* AI Insights */}
+        <div className="mb-8">
+          <AIInsights memberId={member.id} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
