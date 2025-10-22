@@ -109,6 +109,20 @@ export default async function SegmentDetailPage({
                 <p className="text-gray-400">{segment.description}</p>
               )}
             </div>
+            <div className="flex gap-3">
+              <a
+                href={`/api/segments/${segment.id}/export?companyId=${company.id}`}
+                className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 border border-gray-700"
+              >
+                Export CSV
+              </a>
+              <Link
+                href={`/dashboard/${companyId}/segments/${segment.id}/edit`}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              >
+                Edit Segment
+              </Link>
+            </div>
           </div>
         </div>
 
