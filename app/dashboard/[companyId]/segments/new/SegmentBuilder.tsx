@@ -105,11 +105,11 @@ export function SegmentBuilder({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Info */}
-      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
         <h2 className="text-lg font-semibold text-white mb-4">Basic Information</h2>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
               Segment Name *
             </label>
             <input
@@ -117,32 +117,32 @@ export function SegmentBuilder({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., High Spenders, Trial Users..."
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
               Description (optional)
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe what this segment represents..."
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[80px]"
+              className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 min-h-[80px]"
             />
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-white">Filters</h2>
           <button
             type="button"
             onClick={addFilter}
-            className="text-sm bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700 border border-gray-700"
+            className="text-sm bg-zinc-700 text-white px-3 py-1 rounded-xl hover:bg-zinc-600 border border-zinc-600"
           >
             + Add Filter
           </button>
@@ -156,12 +156,12 @@ export function SegmentBuilder({
             return (
               <div
                 key={index}
-                className="bg-gray-800 border border-gray-700 rounded-lg p-4"
+                className="bg-zinc-700 border border-zinc-600 rounded-xl p-4"
               >
                 <div className="flex items-start gap-3">
                   {/* Field */}
                   <div className="flex-1">
-                    <label className="block text-xs text-gray-400 mb-1">Field</label>
+                    <label className="block text-xs text-zinc-400 mb-1">Field</label>
                     <select
                       value={filter.field}
                       onChange={(e) =>
@@ -171,7 +171,7 @@ export function SegmentBuilder({
                           value: "",
                         })
                       }
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
                     >
                       {FILTER_FIELDS.map((f) => (
                         <option key={f.value} value={f.value}>
@@ -183,11 +183,11 @@ export function SegmentBuilder({
 
                   {/* Operator */}
                   <div className="flex-1">
-                    <label className="block text-xs text-gray-400 mb-1">Condition</label>
+                    <label className="block text-xs text-zinc-400 mb-1">Condition</label>
                     <select
                       value={filter.operator}
                       onChange={(e) => updateFilter(index, { operator: e.target.value })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
                     >
                       {operators.map((op) => (
                         <option key={op.value} value={op.value}>
@@ -199,12 +199,12 @@ export function SegmentBuilder({
 
                   {/* Value */}
                   <div className="flex-1">
-                    <label className="block text-xs text-gray-400 mb-1">Value</label>
+                    <label className="block text-xs text-zinc-400 mb-1">Value</label>
                     {filter.field === "status" ? (
                       <select
                         value={filter.value}
                         onChange={(e) => updateFilter(index, { value: e.target.value })}
-                        className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
                       >
                         {STATUS_OPTIONS.map((opt) => (
                           <option key={opt.value} value={opt.value}>
@@ -218,7 +218,7 @@ export function SegmentBuilder({
                         value={filter.value}
                         onChange={(e) => updateFilter(index, { value: e.target.value })}
                         placeholder="Enter value..."
-                        className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-3 py-2 text-white text-sm placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500"
                       />
                     ) : (
                       <input
@@ -226,7 +226,7 @@ export function SegmentBuilder({
                         value={filter.value}
                         onChange={(e) => updateFilter(index, { value: e.target.value })}
                         placeholder="Enter value..."
-                        className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-3 py-2 text-white text-sm placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500"
                       />
                     )}
                   </div>
@@ -236,7 +236,7 @@ export function SegmentBuilder({
                     <button
                       type="button"
                       onClick={() => removeFilter(index)}
-                      className="mt-5 text-red-400 hover:text-red-300"
+                      className="mt-5 text-white hover:text-zinc-300"
                     >
                       ×
                     </button>
@@ -247,7 +247,7 @@ export function SegmentBuilder({
           })}
         </div>
 
-        <p className="text-xs text-gray-500 mt-4">
+        <p className="text-xs text-zinc-500 mt-4">
           All filters are combined with AND logic (members must match all filters)
         </p>
       </div>
@@ -256,14 +256,14 @@ export function SegmentBuilder({
       <div className="flex justify-end gap-3">
         <Link
           href={`/dashboard/${whopCompanyId}/segments`}
-          className="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-700 border border-gray-700"
+          className="bg-zinc-800 text-white px-6 py-2 rounded-xl hover:bg-zinc-700 border border-zinc-700"
         >
           Cancel
         </Link>
         <button
           type="submit"
           disabled={loading || !name.trim()}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-zinc-700 text-white px-6 py-2 rounded-xl hover:bg-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Creating..." : "Create Segment"}
         </button>

@@ -1,11 +1,26 @@
-@layer theme, base, frosted_ui, components, utilities;
+@import "@whop/react/styles.css";
 
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/preflight.css" layer(base);
-@import "tailwindcss/utilities.css" layer(utilities);
-@import "@whop/react/styles.css" layer(frosted_ui);
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@config '../tailwind.config.ts';
+@layer utilities {
+  .bg-zinc-800 {
+    background-color: #27272a !important;
+  }
+  .bg-zinc-950 {
+    background-color: #09090b !important;
+  }
+  .bg-zinc-700 {
+    background-color: #3f3f46 !important;
+  }
+  .bg-primary-500 {
+    background-color: #00bcff !important;
+  }
+  .text-primary-500 {
+    color: #00bcff !important;
+  }
+}
 
 body {
 	background: var(--background);

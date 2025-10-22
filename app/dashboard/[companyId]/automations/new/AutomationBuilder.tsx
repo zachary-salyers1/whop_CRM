@@ -137,10 +137,10 @@ export default function AutomationBuilder({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 space-y-6">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6 space-y-6">
         {/* Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
             Automation Name *
           </label>
           <input
@@ -148,35 +148,35 @@ export default function AutomationBuilder({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g., Tag churned members"
-            className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-white"
+            className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-white"
             required
           />
         </div>
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
             Description (optional)
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe what this automation does..."
-            className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-white h-20"
+            className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-white h-20"
           />
         </div>
       </div>
 
       {/* Trigger */}
-      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-        <h3 className="text-lg font-semibold mb-4 text-blue-400">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
+        <h3 className="text-lg font-semibold mb-4 text-white">
           When (Trigger)
         </h3>
         <div className="space-y-2">
           {TRIGGER_OPTIONS.map((option) => (
             <label
               key={option.value}
-              className="flex items-start gap-3 p-3 bg-gray-800 rounded cursor-pointer hover:bg-gray-750"
+              className="flex items-start gap-3 p-3 bg-zinc-700 rounded-xl cursor-pointer hover:bg-zinc-600"
             >
               <input
                 type="radio"
@@ -190,7 +190,7 @@ export default function AutomationBuilder({
               />
               <div>
                 <div className="font-medium text-white">{option.label}</div>
-                <div className="text-sm text-gray-400">{option.description}</div>
+                <div className="text-sm text-zinc-400">{option.description}</div>
               </div>
             </label>
           ))}
@@ -198,19 +198,19 @@ export default function AutomationBuilder({
       </div>
 
       {/* Actions */}
-      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-        <h3 className="text-lg font-semibold mb-4 text-green-400">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
+        <h3 className="text-lg font-semibold mb-4 text-white">
           Then (Actions)
         </h3>
         <div className="space-y-3">
           {actions.map((action, index) => (
             <div
               key={index}
-              className="bg-gray-800 p-4 rounded space-y-3"
+              className="bg-zinc-700 p-4 rounded-xl space-y-3"
             >
               {/* Action Type */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-zinc-300 mb-2">
                   Action Type
                 </label>
                 <select
@@ -225,7 +225,7 @@ export default function AutomationBuilder({
                       value: "",
                     })
                   }
-                  className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+                  className="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-3 py-2 text-white"
                 >
                   {ACTION_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -238,7 +238,7 @@ export default function AutomationBuilder({
               {/* Tag Selection for add_tag/remove_tag */}
               {(action.type === "add_tag" || action.type === "remove_tag") && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-zinc-300 mb-2">
                     Select Tag *
                   </label>
                   <select
@@ -246,7 +246,7 @@ export default function AutomationBuilder({
                     onChange={(e) =>
                       updateAction(index, { tagId: e.target.value })
                     }
-                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+                    className="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-3 py-2 text-white"
                     required
                   >
                     <option value="">-- Select a tag --</option>
@@ -262,7 +262,7 @@ export default function AutomationBuilder({
               {/* Note Content for add_note */}
               {action.type === "add_note" && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-zinc-300 mb-2">
                     Note Content *
                   </label>
                   <textarea
@@ -271,7 +271,7 @@ export default function AutomationBuilder({
                       updateAction(index, { content: e.target.value })
                     }
                     placeholder="Enter note content..."
-                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white h-20"
+                    className="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-3 py-2 text-white h-20"
                     required
                   />
                 </div>
@@ -281,7 +281,7 @@ export default function AutomationBuilder({
               {action.type === "update_field" && (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-zinc-300 mb-2">
                       Field *
                     </label>
                     <select
@@ -289,7 +289,7 @@ export default function AutomationBuilder({
                       onChange={(e) =>
                         updateAction(index, { field: e.target.value })
                       }
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+                      className="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-3 py-2 text-white"
                       required
                     >
                       <option value="">-- Select field --</option>
@@ -301,7 +301,7 @@ export default function AutomationBuilder({
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-zinc-300 mb-2">
                       Value *
                     </label>
                     <input
@@ -311,7 +311,7 @@ export default function AutomationBuilder({
                         updateAction(index, { value: e.target.value })
                       }
                       placeholder="e.g., high, active"
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+                      className="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-3 py-2 text-white"
                       required
                     />
                   </div>
@@ -323,7 +323,7 @@ export default function AutomationBuilder({
                 <button
                   type="button"
                   onClick={() => removeAction(index)}
-                  className="text-red-400 hover:text-red-300 text-sm"
+                  className="text-white hover:text-zinc-300 text-sm"
                 >
                   Remove Action
                 </button>
@@ -335,7 +335,7 @@ export default function AutomationBuilder({
         <button
           type="button"
           onClick={addAction}
-          className="mt-3 text-blue-400 hover:text-blue-300 text-sm"
+          className="mt-3 text-white hover:text-zinc-300 text-sm"
         >
           + Add Another Action
         </button>
@@ -345,14 +345,14 @@ export default function AutomationBuilder({
       <div className="flex justify-end gap-3">
         <Link
           href={`/dashboard/${whopCompanyId}/automations`}
-          className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 border border-gray-700"
+          className="bg-zinc-800 text-white px-4 py-2 rounded-xl hover:bg-zinc-700 border border-zinc-700"
         >
           Cancel
         </Link>
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          className="bg-zinc-700 text-white px-6 py-2 rounded-xl hover:bg-zinc-600 disabled:opacity-50"
         >
           {loading ? "Creating..." : "Create Automation"}
         </button>

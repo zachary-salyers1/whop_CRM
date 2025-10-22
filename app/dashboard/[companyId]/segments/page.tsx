@@ -106,27 +106,27 @@ export default async function SegmentsPage({
   ];
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-zinc-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-white">Segments</h1>
-              <p className="text-gray-400 mt-2">
+              <p className="text-zinc-400 mt-2">
                 Group and analyze your members
               </p>
             </div>
             <div className="flex gap-3">
               <Link
                 href={`/dashboard/${companyId}`}
-                className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 border border-gray-700"
+                className="bg-zinc-800 text-white px-4 py-2 rounded-xl hover:bg-zinc-700 border border-zinc-700"
               >
                 ← Dashboard
               </Link>
               <Link
                 href={`/dashboard/${companyId}/segments/new`}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                className="bg-zinc-800 text-white px-4 py-2 rounded-xl hover:bg-zinc-700 border border-zinc-700"
               >
                 + Create Segment
               </Link>
@@ -144,29 +144,17 @@ export default async function SegmentsPage({
               <Link
                 key={segment.id}
                 href={`/dashboard/${companyId}/segments/template/${segment.id}`}
-                className="bg-gray-900 border border-gray-800 rounded-lg p-6 hover:border-gray-700 transition-colors group"
+                className="bg-zinc-800 border border-zinc-700 rounded-xl p-6 hover:bg-zinc-700 transition-colors group"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors">
+                  <h3 className="text-lg font-semibold text-white">
                     {segment.name}
                   </h3>
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                      segment.color === "green"
-                        ? "bg-green-900 text-green-200"
-                        : segment.color === "yellow"
-                        ? "bg-yellow-900 text-yellow-200"
-                        : segment.color === "purple"
-                        ? "bg-purple-900 text-purple-200"
-                        : segment.color === "red"
-                        ? "bg-red-900 text-red-200"
-                        : "bg-blue-900 text-blue-200"
-                    }`}
-                  >
+                  <span className="px-3 py-1 rounded-full text-sm font-semibold bg-zinc-700 text-white">
                     {segment.count}
                   </span>
                 </div>
-                <p className="text-sm text-gray-400">{segment.description}</p>
+                <p className="text-sm text-zinc-400">{segment.description}</p>
               </Link>
             ))}
           </div>
@@ -178,13 +166,13 @@ export default async function SegmentsPage({
             Custom Segments
           </h2>
           {customSegments.length === 0 ? (
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-12 text-center">
-              <p className="text-gray-400 mb-4">
+            <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-12 text-center">
+              <p className="text-zinc-400 mb-4">
                 No custom segments yet. Create one to get started!
               </p>
               <Link
                 href={`/dashboard/${companyId}/segments/new`}
-                className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+                className="inline-block bg-zinc-700 text-white px-6 py-3 rounded-xl hover:bg-zinc-600"
               >
                 Create Your First Segment
               </Link>
@@ -195,22 +183,22 @@ export default async function SegmentsPage({
                 <Link
                   key={segment.id}
                   href={`/dashboard/${companyId}/segments/${segment.id}`}
-                  className="bg-gray-900 border border-gray-800 rounded-lg p-6 hover:border-gray-700 transition-colors group"
+                  className="bg-zinc-800 border border-zinc-700 rounded-xl p-6 hover:bg-zinc-700 transition-colors group"
                 >
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-lg font-semibold text-white">
                       {segment.name}
                     </h3>
-                    <span className="px-3 py-1 rounded-full text-sm font-semibold bg-gray-800 text-gray-300">
+                    <span className="px-3 py-1 rounded-full text-sm font-semibold bg-zinc-700 text-white">
                       {segment.memberCount}
                     </span>
                   </div>
                   {segment.description && (
-                    <p className="text-sm text-gray-400 mb-3">
+                    <p className="text-sm text-zinc-400 mb-3">
                       {segment.description}
                     </p>
                   )}
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-zinc-400">
                     Total MRR: ${segment.totalMrr.toFixed(2)}
                   </div>
                 </Link>
