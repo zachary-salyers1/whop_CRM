@@ -2,6 +2,7 @@ import { waitUntil } from "@vercel/functions";
 import { makeWebhookValidator } from "@whop/api";
 import type { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { executeAutomations } from "@/lib/automationEngine";
 
 const validateWebhook = makeWebhookValidator({
 	webhookSecret: process.env.WHOP_WEBHOOK_SECRET ?? "fallback",
@@ -121,6 +122,14 @@ async function handleMembershipCreated(data: any) {
 			occurredAt: new Date(),
 		},
 	});
+
+	// Execute automations
+	await executeAutomations({
+		memberId: member.id,
+		companyId: company.id,
+		triggerType: "membership_created",
+		data,
+	});
 }
 
 async function handleMembershipCancelled(data: any) {
@@ -159,6 +168,14 @@ async function handleMembershipCancelled(data: any) {
 			occurredAt: new Date(),
 		},
 	});
+
+	// Execute automations
+	await executeAutomations({
+		memberId: member.id,
+		companyId: member.companyId,
+		triggerType: "membership_cancelled",
+		data,
+	});
 }
 
 async function handlePaymentSucceeded(data: any) {
@@ -190,6 +207,14 @@ async function handlePaymentSucceeded(data: any) {
 			occurredAt: new Date(),
 		},
 	});
+
+	// Execute automations
+	await executeAutomations({
+		memberId: member.id,
+		companyId: member.companyId,
+		triggerType: "payment_succeeded",
+		data,
+	});
 }
 
 async function handlePaymentFailed(data: any) {
@@ -219,5 +244,13 @@ async function handlePaymentFailed(data: any) {
 			data: data,
 			occurredAt: new Date(),
 		},
+	});
+
+	// Execute automations
+	await executeAutomations({
+		memberId: member.id,
+		companyId: member.companyId,
+		triggerType: "payment_failed",
+		data,
 	});
 }

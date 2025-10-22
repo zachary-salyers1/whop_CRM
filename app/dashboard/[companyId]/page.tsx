@@ -94,6 +94,12 @@ export default async function DashboardPage({
               >
                 Segments
               </Link>
+              <Link
+                href={`/dashboard/${companyId}/automations`}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+              >
+                Automations
+              </Link>
             </div>
           </div>
         </div>
