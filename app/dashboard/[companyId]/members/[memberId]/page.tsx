@@ -5,6 +5,7 @@ import { TagManager } from "./TagManager";
 import { NoteForm } from "./NoteForm";
 import { NotesList } from "./NotesList";
 import AIInsights from "./AIInsights";
+import GPTInsights from "./GPTInsights";
 
 export default async function MemberProfilePage({
   params,
@@ -95,8 +96,9 @@ export default async function MemberProfilePage({
         </div>
 
         {/* AI Insights */}
-        <div className="mb-8">
+        <div className="mb-8 space-y-6">
           <AIInsights memberId={member.id} />
+          <GPTInsights memberId={member.id} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
