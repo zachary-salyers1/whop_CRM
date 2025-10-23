@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import DeleteMemberButton from "./DeleteMemberButton";
 
 export default async function MembersPage({
   params,
@@ -257,6 +258,10 @@ export default async function MembersPage({
                       >
                         View Profile →
                       </Link>
+                      <DeleteMemberButton
+                        memberId={member.id}
+                        memberName={member.username || member.email}
+                      />
                     </td>
                   </tr>
                 ))

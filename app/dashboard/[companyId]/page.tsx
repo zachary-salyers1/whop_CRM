@@ -185,11 +185,14 @@ export default async function DashboardPage({
           </div>
         </div>
 
-        {company.lastSyncedAt && (
-          <div className="mt-4 text-sm text-zinc-400 text-center">
-            Last synced: {new Date(company.lastSyncedAt).toLocaleString()}
-          </div>
-        )}
+        <div className="mt-4 flex items-center justify-center gap-4">
+          <SyncButton companyId={company.id} />
+          {company.lastSyncedAt && (
+            <span className="text-sm text-zinc-400">
+              Last synced: {new Date(company.lastSyncedAt).toLocaleString()}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

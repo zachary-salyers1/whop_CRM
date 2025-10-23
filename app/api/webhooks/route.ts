@@ -46,6 +46,11 @@ async function handleWebhook(webhookData: any) {
 				await handlePaymentFailed(data);
 				break;
 
+			case "user.joined_community":
+			case "member.created":
+				await handleFreeMemberJoined(data);
+				break;
+
 			default:
 				console.log(`Unhandled webhook action: ${action}`);
 		}
@@ -266,4 +271,60 @@ async function handlePaymentFailed(data: any) {
 
 	// Update AI insights
 	await updateMemberInsights(member.id);
+}
+
+async function handleFreeMemberJoined(data: any) {
+	const user = data.user || data;
+
+	if (!user || !user.id) return;
+
+	// Find company
+	const company = await prisma.company.findFirst({
+		where: { isActive: true },
+	});
+
+	if (!company) {
+		console.error("No active company found");
+		return;
+	}
+
+	// Create member with inactive status (no paid plan)
+	const member = await prisma.member.upsert({
+		where: { whopUserId: user.id },
+		update: {
+			email: user.email || "",
+			username: user.username,
+			profilePicUrl: user.profile_pic_url,
+			lastSeenAt: new Date(),
+			updatedAt: new Date(),
+		},
+		create: {
+			whopUserId: user.id,
+			email: user.email || "",
+			username: user.username,
+			profilePicUrl: user.profile_pic_url,
+			companyId: company.id,
+			status: "inactive",
+			currentPlan: null,
+			planId: null,
+		},
+	});
+
+	// Create event
+	await prisma.event.create({
+		data: {
+			type: "member_joined",
+			memberId: member.id,
+			data: data,
+			occurredAt: new Date(),
+		},
+	});
+
+	// Execute automations for new free members
+	await executeAutomations({
+		memberId: member.id,
+		companyId: company.id,
+		triggerType: "member_joined",
+		data,
+	});
 }
