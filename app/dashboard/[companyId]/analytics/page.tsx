@@ -48,13 +48,32 @@ export default async function AnalyticsPage({
     cohorts.get(cohortKey)!.push(member);
   });
 
+  // Generate continuous timeline from earliest to latest month
+  const now = new Date();
+  const allMonths: string[] = [];
+
+  if (members.length > 0 && members[0]?.firstJoinedAt) {
+    const earliestDate = new Date(members[0].firstJoinedAt);
+    earliestDate.setDate(1); // Normalize to first of month
+
+    const currentMonth = new Date(now);
+    currentMonth.setDate(1);
+
+    // Generate all months from earliest to current
+    const month = new Date(earliestDate);
+    while (month <= currentMonth) {
+      allMonths.push(month.toISOString().slice(0, 7));
+      month.setMonth(month.getMonth() + 1);
+    }
+  }
+
   // Calculate retention for each cohort
   const cohortData: CohortData[] = [];
-  const now = new Date();
 
-  Array.from(cohorts.entries())
-    .sort(([a], [b]) => b.localeCompare(a)) // Sort newest first
-    .forEach(([cohortMonth, cohortMembers]) => {
+  allMonths
+    .sort((a, b) => b.localeCompare(a)) // Sort newest first
+    .forEach((cohortMonth) => {
+      const cohortMembers = cohorts.get(cohortMonth) || [];
       const cohortStart = new Date(cohortMonth + "-01");
 
       // Calculate how many are still active after X days
