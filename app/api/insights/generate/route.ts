@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     const totalMembers = members.length;
     const activeMembers = members.filter((m) => m.status === "active").length;
     const cancelledMembers = members.filter((m) => m.status === "cancelled").length;
-    const highChurnRiskMembers = members.filter((m) => m.churnRisk && m.churnRisk >= 70).length;
+    const highChurnRiskMembers = members.filter((m) => m.churnRisk === "high").length;
     const lowEngagementMembers = members.filter((m) => m.engagementScore && m.engagementScore < 40).length;
 
     const totalRevenue = members.reduce((sum, m) => sum + m.totalRevenue, 0);
