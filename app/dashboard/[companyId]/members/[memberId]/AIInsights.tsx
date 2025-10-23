@@ -40,10 +40,10 @@ export default function AIInsights({ memberId }: { memberId: string }) {
 
   if (loading) {
     return (
-      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
         <div className="animate-pulse">
-          <div className="h-4 bg-gray-800 rounded w-1/4 mb-4"></div>
-          <div className="h-20 bg-gray-800 rounded"></div>
+          <div className="h-4 bg-zinc-700 rounded w-1/4 mb-4"></div>
+          <div className="h-20 bg-zinc-700 rounded"></div>
         </div>
       </div>
     );
@@ -56,13 +56,13 @@ export default function AIInsights({ memberId }: { memberId: string }) {
   const getChurnRiskColor = (risk: string) => {
     switch (risk) {
       case "high":
-        return "text-red-400 bg-red-400/10 border-red-400/20";
+        return "text-red-400 bg-red-950/50 border-red-800";
       case "medium":
-        return "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
+        return "text-yellow-400 bg-yellow-950/50 border-yellow-800";
       case "low":
-        return "text-green-400 bg-green-400/10 border-green-400/20";
+        return "text-green-400 bg-green-950/50 border-green-800";
       default:
-        return "text-gray-400 bg-gray-400/10 border-gray-400/20";
+        return "text-zinc-400 bg-zinc-800 border-zinc-700";
     }
   };
 
@@ -75,20 +75,20 @@ export default function AIInsights({ memberId }: { memberId: string }) {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "text-red-400 bg-red-400/10 border-red-400/20";
+        return "text-red-400 bg-red-950/50 border-red-800";
       case "medium":
-        return "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
+        return "text-yellow-400 bg-yellow-950/50 border-yellow-800";
       case "low":
-        return "text-blue-400 bg-blue-400/10 border-blue-400/20";
+        return "text-primary-400 bg-primary-950/50 border-primary-800";
       default:
-        return "text-gray-400 bg-gray-400/10 border-gray-400/20";
+        return "text-zinc-400 bg-zinc-800 border-zinc-700";
     }
   };
 
   return (
     <div className="space-y-6">
       {/* AI Scores */}
-      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
           <span className="text-purple-400">✨</span>
           AI Insights
@@ -96,7 +96,7 @@ export default function AIInsights({ memberId }: { memberId: string }) {
 
         <div className="grid grid-cols-3 gap-4">
           <div>
-            <div className="text-sm text-gray-400 mb-2">Churn Risk</div>
+            <div className="text-sm text-zinc-400 mb-2">Churn Risk</div>
             <span
               className={`inline-block px-3 py-1 text-sm font-medium rounded-full border ${getChurnRiskColor(
                 insights.churnRisk
@@ -107,15 +107,15 @@ export default function AIInsights({ memberId }: { memberId: string }) {
           </div>
 
           <div>
-            <div className="text-sm text-gray-400 mb-2">Engagement Score</div>
+            <div className="text-sm text-zinc-400 mb-2">Engagement Score</div>
             <div className={`text-2xl font-bold ${getEngagementColor(insights.engagementScore)}`}>
               {insights.engagementScore}
-              <span className="text-sm text-gray-400">/100</span>
+              <span className="text-sm text-zinc-400">/100</span>
             </div>
           </div>
 
           <div>
-            <div className="text-sm text-gray-400 mb-2">Predicted LTV</div>
+            <div className="text-sm text-zinc-400 mb-2">Predicted LTV</div>
             <div className="text-2xl font-bold text-white">
               ${insights.lifetimeValue.toFixed(2)}
             </div>
@@ -125,9 +125,9 @@ export default function AIInsights({ memberId }: { memberId: string }) {
 
       {/* AI Recommendations */}
       {insights.recommendations.length > 0 && (
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+        <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <span className="text-blue-400">💡</span>
+            <span className="text-primary-400">💡</span>
             Recommended Actions
           </h3>
 
@@ -135,7 +135,7 @@ export default function AIInsights({ memberId }: { memberId: string }) {
             {insights.recommendations.map((rec, index) => (
               <div
                 key={index}
-                className="bg-gray-800 border border-gray-700 rounded-lg p-4"
+                className="bg-zinc-900/50 border border-zinc-700 rounded-lg p-4"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
@@ -146,12 +146,12 @@ export default function AIInsights({ memberId }: { memberId: string }) {
                     >
                       {rec.priority.toUpperCase()}
                     </span>
-                    <span className="text-xs text-gray-500 uppercase">{rec.type}</span>
+                    <span className="text-xs text-zinc-500 uppercase">{rec.type}</span>
                   </div>
                 </div>
-                <p className="text-sm text-gray-300 mb-2">{rec.message}</p>
+                <p className="text-sm text-zinc-300 mb-2">{rec.message}</p>
                 {rec.action && (
-                  <p className="text-sm text-blue-400">
+                  <p className="text-sm text-primary-400">
                     → <span className="font-medium">{rec.action}</span>
                   </p>
                 )}

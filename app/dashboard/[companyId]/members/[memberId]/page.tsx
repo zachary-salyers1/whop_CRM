@@ -57,13 +57,13 @@ export default async function MemberProfilePage({
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-zinc-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <Link
             href={`/dashboard/${companyId}/members`}
-            className="text-blue-400 hover:text-blue-300 mb-4 inline-block"
+            className="text-primary-400 hover:text-primary-300 mb-4 inline-block"
           >
             ← Back to Members
           </Link>
@@ -72,15 +72,15 @@ export default async function MemberProfilePage({
               <h1 className="text-3xl font-bold text-white">
                 {member.username || "No Username"}
               </h1>
-              <p className="text-gray-400 mt-1">{member.email}</p>
+              <p className="text-zinc-400 mt-1">{member.email}</p>
               <div className="flex gap-2 mt-3 items-center">
                 <span
                   className={`px-3 py-1 text-sm font-semibold rounded-full ${
                     member.status === "active"
-                      ? "bg-green-900 text-green-200"
+                      ? "bg-green-950/50 text-green-400 border border-green-800"
                       : member.status === "cancelled"
-                      ? "bg-red-900 text-red-200"
-                      : "bg-yellow-900 text-yellow-200"
+                      ? "bg-red-950/50 text-red-400 border border-red-800"
+                      : "bg-yellow-950/50 text-yellow-400 border border-yellow-800"
                   }`}
                 >
                   {member.status}
@@ -105,31 +105,31 @@ export default async function MemberProfilePage({
           {/* Left Column - Stats & Details */}
           <div className="lg:col-span-1 space-y-6">
             {/* Stats */}
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+            <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-4">
                 Overview
               </h2>
               <div className="space-y-4">
                 <div>
-                  <div className="text-sm text-gray-400">Total Revenue</div>
+                  <div className="text-sm text-zinc-400">Total Revenue</div>
                   <div className="text-2xl font-bold text-white">
                     ${member.totalRevenue.toFixed(2)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-400">Monthly Revenue</div>
+                  <div className="text-sm text-zinc-400">Monthly Revenue</div>
                   <div className="text-xl font-bold text-white">
                     ${member.monthlyRevenue.toFixed(2)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-400">Lifetime Value</div>
+                  <div className="text-sm text-zinc-400">Lifetime Value</div>
                   <div className="text-xl font-bold text-white">
                     ${member.lifetimeValue.toFixed(2)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-400">Engagement Score</div>
+                  <div className="text-sm text-zinc-400">Engagement Score</div>
                   <div className="text-xl font-bold text-white">
                     {member.engagementScore}/100
                   </div>
@@ -138,30 +138,30 @@ export default async function MemberProfilePage({
             </div>
 
             {/* Member Details */}
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+            <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-4">Details</h2>
               <div className="space-y-3">
                 <div>
-                  <div className="text-sm text-gray-400">Whop User ID</div>
+                  <div className="text-sm text-zinc-400">Whop User ID</div>
                   <div className="text-sm text-white font-mono">
                     {member.whopUserId}
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-400">Current Plan</div>
+                  <div className="text-sm text-zinc-400">Current Plan</div>
                   <div className="text-sm text-white">
                     {member.currentPlan || "No plan"}
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-400">Joined</div>
+                  <div className="text-sm text-zinc-400">Joined</div>
                   <div className="text-sm text-white">
                     {new Date(member.firstJoinedAt).toLocaleDateString()}
                   </div>
                 </div>
                 {member.cancelledAt && (
                   <div>
-                    <div className="text-sm text-gray-400">Cancelled</div>
+                    <div className="text-sm text-zinc-400">Cancelled</div>
                     <div className="text-sm text-white">
                       {new Date(member.cancelledAt).toLocaleDateString()}
                     </div>
@@ -169,7 +169,7 @@ export default async function MemberProfilePage({
                 )}
                 {member.lastSeenAt && (
                   <div>
-                    <div className="text-sm text-gray-400">Last Seen</div>
+                    <div className="text-sm text-zinc-400">Last Seen</div>
                     <div className="text-sm text-white">
                       {new Date(member.lastSeenAt).toLocaleDateString()}
                     </div>
@@ -179,39 +179,39 @@ export default async function MemberProfilePage({
             </div>
 
             {/* Memberships */}
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+            <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-4">
                 Subscriptions
               </h2>
               <div className="space-y-3">
                 {member.memberships.length === 0 ? (
-                  <p className="text-sm text-gray-400">No subscriptions</p>
+                  <p className="text-sm text-zinc-400">No subscriptions</p>
                 ) : (
                   member.memberships.map((membership) => (
                     <div
                       key={membership.id}
-                      className="border border-gray-800 rounded p-3"
+                      className="border border-zinc-700 rounded-lg p-3 bg-zinc-900/50"
                     >
                       <div className="flex justify-between items-start">
                         <div>
                           <div className="text-sm font-medium text-white">
                             {membership.planName}
                           </div>
-                          <div className="text-xs text-gray-400 mt-1">
+                          <div className="text-xs text-zinc-400 mt-1">
                             ${membership.price.toFixed(2)}/{membership.interval}
                           </div>
                         </div>
                         <span
                           className={`px-2 py-1 text-xs font-semibold rounded ${
                             membership.status === "active"
-                              ? "bg-green-900 text-green-200"
-                              : "bg-gray-800 text-gray-300"
+                              ? "bg-green-950/50 text-green-400 border border-green-800"
+                              : "bg-zinc-700 text-zinc-300"
                           }`}
                         >
                           {membership.status}
                         </span>
                       </div>
-                      <div className="text-xs text-gray-500 mt-2">
+                      <div className="text-xs text-zinc-500 mt-2">
                         Started: {new Date(membership.startedAt).toLocaleDateString()}
                       </div>
                     </div>
@@ -224,49 +224,49 @@ export default async function MemberProfilePage({
           {/* Right Column - Timeline & Notes */}
           <div className="lg:col-span-2 space-y-6">
             {/* Notes */}
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+            <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-4">Notes</h2>
               <div className="space-y-4 mb-6">
                 <NoteForm memberId={member.id} companyId={company.id} />
               </div>
-              <div className="border-t border-gray-800 pt-6">
+              <div className="border-t border-zinc-700 pt-6">
                 <NotesList notes={member.notes} memberId={member.id} />
               </div>
             </div>
 
             {/* Event Timeline */}
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+            <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-4">
                 Activity Timeline
               </h2>
               <div className="space-y-4">
                 {member.events.length === 0 ? (
-                  <p className="text-sm text-gray-400">No activity yet</p>
+                  <p className="text-sm text-zinc-400">No activity yet</p>
                 ) : (
                   <div className="relative">
                     {/* Timeline line */}
-                    <div className="absolute left-4 top-0 bottom-0 w-px bg-gray-800"></div>
+                    <div className="absolute left-4 top-0 bottom-0 w-px bg-zinc-700"></div>
 
                     {member.events.map((event, index) => (
                       <div key={event.id} className="relative pl-10 pb-6">
                         {/* Timeline dot */}
                         <div
-                          className={`absolute left-2.5 w-3 h-3 rounded-full border-2 border-gray-900 ${
+                          className={`absolute left-2.5 w-3 h-3 rounded-full border-2 border-zinc-800 ${
                             event.type.includes("succeeded") || event.type.includes("created")
                               ? "bg-green-500"
                               : event.type.includes("failed") || event.type.includes("cancelled")
                               ? "bg-red-500"
-                              : "bg-blue-500"
+                              : "bg-primary-500"
                           }`}
                         ></div>
 
-                        <div className="bg-gray-800 rounded-lg p-4">
+                        <div className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-700">
                           <div className="flex justify-between items-start">
                             <div>
                               <div className="text-sm font-medium text-white capitalize">
                                 {event.type.replace(/_/g, " ")}
                               </div>
-                              <div className="text-xs text-gray-400 mt-1">
+                              <div className="text-xs text-zinc-400 mt-1">
                                 {new Date(event.occurredAt).toLocaleString()}
                               </div>
                             </div>
