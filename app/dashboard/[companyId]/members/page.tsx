@@ -1,16 +1,17 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import MembersTable from "./MembersTable";
+import AISearch from "./AISearch";
 
 export default async function MembersPage({
   params,
   searchParams,
 }: {
   params: Promise<{ companyId: string }>;
-  searchParams: Promise<{ search?: string; status?: string }>;
+  searchParams: Promise<{ search?: string; status?: string; ai?: string; query?: string; filters?: string }>;
 }) {
   const { companyId } = await params;
-  const { search, status } = await searchParams;
+  const { search, status, ai, query, filters } = await searchParams;
 
   const company = await prisma.company.findUnique({
     where: { whopCompanyId: companyId },
@@ -25,15 +26,47 @@ export default async function MembersPage({
     companyId: company.id,
   };
 
-  if (search) {
-    whereClause.OR = [
-      { email: { contains: search, mode: "insensitive" } },
-      { username: { contains: search, mode: "insensitive" } },
-    ];
-  }
+  // Handle AI search filters
+  if (ai === "true" && filters) {
+    try {
+      const parsedFilters = JSON.parse(filters);
 
-  if (status && status !== "all") {
-    whereClause.status = status;
+      // Apply AI-generated filters
+      if (parsedFilters.status) {
+        whereClause.status = parsedFilters.status;
+      }
+      if (parsedFilters.churnRisk) {
+        whereClause.churnRisk = parsedFilters.churnRisk;
+      }
+      if (parsedFilters.engagementScore) {
+        whereClause.engagementScore = parsedFilters.engagementScore;
+      }
+      if (parsedFilters.totalRevenue) {
+        whereClause.totalRevenue = parsedFilters.totalRevenue;
+      }
+      if (parsedFilters.monthlyRevenue) {
+        whereClause.monthlyRevenue = parsedFilters.monthlyRevenue;
+      }
+      if (parsedFilters.daysSinceJoined !== undefined) {
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - parsedFilters.daysSinceJoined);
+        whereClause.firstJoinedAt = { gte: cutoffDate };
+      }
+    } catch (e) {
+      console.error("Failed to parse AI filters:", e);
+    }
+  } else {
+    // Regular search
+    if (search) {
+      whereClause.OR = [
+        { email: { contains: search, mode: "insensitive" } },
+        { username: { contains: search, mode: "insensitive" } },
+      ];
+    }
+
+    if (status && status !== "all") {
+      whereClause.status = status;
+    }
   }
 
   const members = await prisma.member.findMany({
@@ -132,6 +165,25 @@ export default async function MembersPage({
             </div>
           </div>
         </div>
+
+        {/* AI Search */}
+        <AISearch companyId={companyId} />
+
+        {/* Show AI query if active */}
+        {ai === "true" && query && (
+          <div className="mb-6 px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-zinc-400">AI Search Results for:</span>
+              <span className="text-sm font-medium text-white">"{query}"</span>
+            </div>
+            <Link
+              href={`/dashboard/${companyId}/members`}
+              className="text-sm text-zinc-400 hover:text-white"
+            >
+              Clear
+            </Link>
+          </div>
+        )}
 
         {/* Filters */}
         <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-4 mb-6">

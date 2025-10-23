@@ -34,6 +34,7 @@ model Company {
   automations       Automation[]
   notes             Note[]
   tags              Tag[]
+  dashboardInsights DashboardInsight[]
 
   @@index([whopCompanyId])
 }
@@ -252,4 +253,33 @@ model Automation {
 
   @@index([companyId])
   @@index([isActive])
+}
+
+// AI-generated insights for dashboard
+model DashboardInsight {
+  id          String   @id @default(cuid())
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  // Insight content
+  title       String
+  description String
+  priority    String   // "critical", "high", "medium", "low"
+  category    String   // "churn", "revenue", "engagement", "growth"
+
+  // Associated data
+  metric      String?  // e.g., "23 members", "15% increase"
+  actionable  Boolean  @default(false)
+  actionUrl   String?  // Link to segment or relevant page
+
+  // Metadata
+  generatedAt DateTime @default(now())
+  expiresAt   DateTime? // Auto-hide after this date
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([companyId, isActive])
+  @@index([generatedAt])
 }

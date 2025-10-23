@@ -7,6 +7,7 @@ import {
   RevenueByPlanChart,
   EngagementLeaderboard,
 } from "./DashboardCharts";
+import DashboardInsights from "./DashboardInsights";
 
 export default async function DashboardPage({
   params,
@@ -87,6 +88,18 @@ export default async function DashboardPage({
       firstJoinedAt: true,
       currentPlan: true,
     },
+  });
+
+  // Fetch AI insights
+  const insights = await prisma.dashboardInsight.findMany({
+    where: {
+      companyId: company.id,
+      isActive: true,
+    },
+    orderBy: {
+      generatedAt: "desc",
+    },
+    take: 5,
   });
 
   return (
@@ -176,6 +189,11 @@ export default async function DashboardPage({
             <SyncButton companyId={company.id} />
           </div>
         )}
+
+        {/* AI Insights */}
+        <div className="mb-8">
+          <DashboardInsights initialInsights={insights} companyId={companyId} />
+        </div>
 
         {/* Charts Grid */}
         {allMembers.length > 0 && (
