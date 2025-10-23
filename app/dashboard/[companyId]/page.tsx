@@ -91,7 +91,7 @@ export default async function DashboardPage({
   });
 
   // Fetch AI insights
-  const insights = await prisma.dashboardInsight.findMany({
+  const insightsRaw = await prisma.dashboardInsight.findMany({
     where: {
       companyId: company.id,
       isActive: true,
@@ -101,6 +101,15 @@ export default async function DashboardPage({
     },
     take: 5,
   });
+
+  // Convert Date objects to strings for client component
+  const insights = insightsRaw.map(insight => ({
+    ...insight,
+    generatedAt: insight.generatedAt.toISOString(),
+    createdAt: insight.createdAt.toISOString(),
+    updatedAt: insight.updatedAt.toISOString(),
+    expiresAt: insight.expiresAt?.toISOString() || null,
+  }));
 
   return (
     <div className="min-h-screen bg-zinc-950">
