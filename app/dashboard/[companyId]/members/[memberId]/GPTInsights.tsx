@@ -66,11 +66,11 @@ export default function GPTInsights({ memberId }: { memberId: string }) {
   const getChurnRiskColor = (risk: string) => {
     switch (risk) {
       case "high":
-        return "text-red-400 bg-red-950/50 border-red-800";
+        return "text-red-400 bg-red-900/30 border-red-700";
       case "medium":
-        return "text-yellow-400 bg-yellow-950/50 border-yellow-800";
+        return "text-yellow-400 bg-yellow-900/30 border-yellow-700";
       case "low":
-        return "text-green-400 bg-green-950/50 border-green-800";
+        return "text-green-400 bg-green-900/30 border-green-700";
       default:
         return "text-zinc-400 bg-zinc-800 border-zinc-700";
     }
@@ -92,13 +92,13 @@ export default function GPTInsights({ memberId }: { memberId: string }) {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "critical":
-        return "text-red-400 bg-red-950/50 border-red-800";
+        return "text-red-400 bg-red-900/30 border-red-700";
       case "high":
-        return "text-orange-400 bg-orange-950/50 border-orange-800";
+        return "text-orange-400 bg-orange-900/30 border-orange-700";
       case "medium":
-        return "text-yellow-400 bg-yellow-950/50 border-yellow-800";
+        return "text-yellow-400 bg-yellow-900/30 border-yellow-700";
       case "low":
-        return "text-primary-400 bg-primary-950/50 border-primary-800";
+        return "text-white bg-zinc-700 border-zinc-600";
       default:
         return "text-zinc-400 bg-zinc-800 border-zinc-700";
     }
@@ -106,11 +106,11 @@ export default function GPTInsights({ memberId }: { memberId: string }) {
 
   if (!insights && !loading && !error) {
     return (
-      <div className="bg-gradient-to-br from-purple-900/20 to-blue-900/20 border border-purple-800/30 rounded-xl p-6">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
         <div className="flex items-start justify-between mb-4">
           <div>
             <h3 className="text-lg font-semibold flex items-center gap-2 mb-2">
-              <span className="text-purple-400">🤖</span>
+              <span>🤖</span>
               GPT-4o AI Analysis
             </h3>
             <p className="text-sm text-zinc-400">
@@ -121,7 +121,7 @@ export default function GPTInsights({ memberId }: { memberId: string }) {
 
         <button
           onClick={analyzeWithGPT}
-          className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+          className="bg-zinc-700 text-white px-4 py-2 rounded-lg hover:bg-zinc-600 transition-colors"
         >
           Analyze with GPT-4o
         </button>
@@ -131,10 +131,10 @@ export default function GPTInsights({ memberId }: { memberId: string }) {
 
   if (loading) {
     return (
-      <div className="bg-gradient-to-br from-purple-900/20 to-blue-900/20 border border-purple-800/30 rounded-xl p-6">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="animate-spin rounded-full h-5 w-5 border-2 border-purple-400 border-t-transparent"></div>
-          <span className="text-purple-400">Analyzing with GPT-4o...</span>
+          <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary-400 border-t-transparent"></div>
+          <span className="text-white">Analyzing with GPT-4o...</span>
         </div>
         <p className="text-sm text-zinc-400">
           This may take 10-15 seconds as we analyze this member's complete history.
@@ -145,7 +145,7 @@ export default function GPTInsights({ memberId }: { memberId: string }) {
 
   if (error) {
     return (
-      <div className="bg-red-900/20 border border-red-800/30 rounded-xl p-6">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
         <h3 className="text-lg font-semibold text-red-400 mb-2">Analysis Failed</h3>
         <p className="text-sm text-zinc-400 mb-4">{error}</p>
         <button
@@ -163,11 +163,11 @@ export default function GPTInsights({ memberId }: { memberId: string }) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-br from-purple-900/20 to-blue-900/20 border border-purple-800/30 rounded-xl p-6">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
         <div className="flex items-start justify-between mb-4">
           <div>
             <h3 className="text-lg font-semibold flex items-center gap-2">
-              <span className="text-purple-400">🤖</span>
+              <span>🤖</span>
               GPT-4o AI Analysis
             </h3>
             {analyzedAt && (
@@ -178,7 +178,7 @@ export default function GPTInsights({ memberId }: { memberId: string }) {
           </div>
           <button
             onClick={analyzeWithGPT}
-            className="text-sm text-purple-400 hover:text-purple-300"
+            className="text-sm text-white hover:text-zinc-300"
           >
             Re-analyze
           </button>
@@ -284,13 +284,13 @@ export default function GPTInsights({ memberId }: { memberId: string }) {
       {insights.keyInsights.length > 0 && (
         <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
           <h4 className="text-md font-semibold mb-3 flex items-center gap-2">
-            <span className="text-primary-400">💡</span>
+            <span>💡</span>
             Key Insights
           </h4>
           <ul className="space-y-2">
             {insights.keyInsights.map((insight, i) => (
               <li key={i} className="text-sm text-zinc-300 flex items-start gap-2">
-                <span className="text-primary-400 mt-1">•</span>
+                <span className="text-white mt-1">•</span>
                 <span>{insight}</span>
               </li>
             ))}

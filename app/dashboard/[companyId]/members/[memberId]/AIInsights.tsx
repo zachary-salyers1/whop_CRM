@@ -56,11 +56,11 @@ export default function AIInsights({ memberId }: { memberId: string }) {
   const getChurnRiskColor = (risk: string) => {
     switch (risk) {
       case "high":
-        return "text-red-400 bg-red-950/50 border-red-800";
+        return "text-red-400 bg-red-900/30 border-red-700";
       case "medium":
-        return "text-yellow-400 bg-yellow-950/50 border-yellow-800";
+        return "text-yellow-400 bg-yellow-900/30 border-yellow-700";
       case "low":
-        return "text-green-400 bg-green-950/50 border-green-800";
+        return "text-green-400 bg-green-900/30 border-green-700";
       default:
         return "text-zinc-400 bg-zinc-800 border-zinc-700";
     }
@@ -75,11 +75,11 @@ export default function AIInsights({ memberId }: { memberId: string }) {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "text-red-400 bg-red-950/50 border-red-800";
+        return "text-red-400 bg-red-900/30 border-red-700";
       case "medium":
-        return "text-yellow-400 bg-yellow-950/50 border-yellow-800";
+        return "text-yellow-400 bg-yellow-900/30 border-yellow-700";
       case "low":
-        return "text-primary-400 bg-primary-950/50 border-primary-800";
+        return "text-white bg-zinc-700 border-zinc-600";
       default:
         return "text-zinc-400 bg-zinc-800 border-zinc-700";
     }
@@ -151,7 +151,7 @@ export default function AIInsights({ memberId }: { memberId: string }) {
                 </div>
                 <p className="text-sm text-zinc-300 mb-2">{rec.message}</p>
                 {rec.action && (
-                  <p className="text-sm text-primary-400">
+                  <p className="text-sm text-white">
                     → <span className="font-medium">{rec.action}</span>
                   </p>
                 )}

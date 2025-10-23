@@ -222,23 +222,6 @@ export default async function AnalyticsPage({
               </table>
             </div>
           )}
-
-          <div className="mt-6 p-4 bg-zinc-900 rounded-lg border border-zinc-700">
-            <h3 className="text-sm font-medium text-white mb-2">
-              How to read this table:
-            </h3>
-            <ul className="text-sm text-zinc-400 space-y-1">
-              <li>
-                • Each row represents members who joined in that specific month
-              </li>
-              <li>
-                • Retention % shows how many of those members are still active
-                after X days
-              </li>
-              <li>• Green = strong retention (≥70%), Yellow = moderate (40-69%), Red = poor (&lt;40%)</li>
-              <li>• Gray cells indicate the cohort hasn't reached that age yet</li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
@@ -256,7 +239,7 @@ function RetentionCell({ value }: { value: number }) {
   if (value >= 70) {
     return (
       <td className="px-4 py-4 text-center">
-        <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full border bg-green-950/50 text-green-400 border-green-800">
+        <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full border bg-green-900/30 text-green-400 border-green-700">
           {value}%
         </span>
       </td>
@@ -266,7 +249,7 @@ function RetentionCell({ value }: { value: number }) {
   if (value >= 40) {
     return (
       <td className="px-4 py-4 text-center">
-        <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full border bg-yellow-950/50 text-yellow-400 border-yellow-800">
+        <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full border bg-yellow-900/30 text-yellow-400 border-yellow-700">
           {value}%
         </span>
       </td>
@@ -275,7 +258,7 @@ function RetentionCell({ value }: { value: number }) {
 
   return (
     <td className="px-4 py-4 text-center">
-      <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full border bg-red-950/50 text-red-400 border-red-800">
+      <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full border bg-red-900/30 text-red-400 border-red-700">
         {value}%
       </span>
     </td>

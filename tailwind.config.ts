@@ -7,6 +7,14 @@ export default {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    // Ensure color variants are available for dynamic styling
+    'bg-green-950/50', 'text-green-400', 'border-green-800',
+    'bg-yellow-950/50', 'text-yellow-400', 'border-yellow-800',
+    'bg-red-950/50', 'text-red-400', 'border-red-800',
+    'bg-orange-950/50', 'text-orange-400', 'border-orange-800',
+    'bg-primary-950/50', 'text-primary-400', 'border-primary-800',
+  ],
   theme: {
     extend: {
       colors: {

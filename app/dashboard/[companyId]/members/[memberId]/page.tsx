@@ -63,7 +63,7 @@ export default async function MemberProfilePage({
         <div className="mb-8">
           <Link
             href={`/dashboard/${companyId}/members`}
-            className="text-primary-400 hover:text-primary-300 mb-4 inline-block"
+            className="text-white hover:text-zinc-300 mb-4 inline-block"
           >
             ← Back to Members
           </Link>
@@ -77,10 +77,10 @@ export default async function MemberProfilePage({
                 <span
                   className={`px-3 py-1 text-sm font-semibold rounded-full ${
                     member.status === "active"
-                      ? "bg-green-950/50 text-green-400 border border-green-800"
+                      ? "bg-green-900/30 text-green-400 border border-green-700"
                       : member.status === "cancelled"
-                      ? "bg-red-950/50 text-red-400 border border-red-800"
-                      : "bg-yellow-950/50 text-yellow-400 border border-yellow-800"
+                      ? "bg-red-900/30 text-red-400 border border-red-700"
+                      : "bg-yellow-900/30 text-yellow-400 border border-yellow-700"
                   }`}
                 >
                   {member.status}
@@ -204,7 +204,7 @@ export default async function MemberProfilePage({
                         <span
                           className={`px-2 py-1 text-xs font-semibold rounded ${
                             membership.status === "active"
-                              ? "bg-green-950/50 text-green-400 border border-green-800"
+                              ? "bg-green-900/30 text-green-400 border border-green-700"
                               : "bg-zinc-700 text-zinc-300"
                           }`}
                         >
