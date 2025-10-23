@@ -73,19 +73,36 @@ export default async function MembersPage({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-white">Members</h1>
-              <p className="text-zinc-400 mt-2">
-                Manage and view all your members
-              </p>
-            </div>
-            <Link
-              href={`/dashboard/${companyId}`}
-              className="bg-zinc-800 text-white px-4 py-2 rounded-xl hover:bg-zinc-700 border border-zinc-700"
-            >
-              ← Back to Dashboard
-            </Link>
+          <h1 className="text-3xl font-bold text-white mb-6">Dashboard</h1>
+
+          {/* Tabs Navigation */}
+          <div className="border-b border-zinc-800">
+            <nav className="flex gap-2">
+              <Link
+                href={`/dashboard/${companyId}`}
+                className="pb-3 pt-3 px-6 text-zinc-500 hover:text-zinc-300 transition-colors"
+              >
+                Overview
+              </Link>
+              <Link
+                href={`/dashboard/${companyId}/members`}
+                className="bg-zinc-800 border-t border-x border-zinc-700 pb-3 pt-3 px-6 text-white font-medium rounded-t-lg"
+              >
+                Members
+              </Link>
+              <Link
+                href={`/dashboard/${companyId}/segments`}
+                className="pb-3 pt-3 px-6 text-zinc-500 hover:text-zinc-300 transition-colors"
+              >
+                Segments
+              </Link>
+              <Link
+                href={`/dashboard/${companyId}/automations`}
+                className="pb-3 pt-3 px-6 text-zinc-500 hover:text-zinc-300 transition-colors"
+              >
+                Automations
+              </Link>
+            </nav>
           </div>
         </div>
 
