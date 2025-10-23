@@ -252,18 +252,30 @@ function RetentionCell({ value }: { value: number }) {
     );
   }
 
-  const color =
-    value >= 70
-      ? "bg-green-900/30 text-green-400 border-green-800"
-      : value >= 40
-      ? "bg-yellow-900/30 text-yellow-400 border-yellow-800"
-      : "bg-red-900/30 text-red-400 border-red-800";
+  // Use complete class strings for Tailwind JIT to detect
+  if (value >= 70) {
+    return (
+      <td className="px-4 py-4 text-center">
+        <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full border bg-green-950/50 text-green-400 border-green-800">
+          {value}%
+        </span>
+      </td>
+    );
+  }
+
+  if (value >= 40) {
+    return (
+      <td className="px-4 py-4 text-center">
+        <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full border bg-yellow-950/50 text-yellow-400 border-yellow-800">
+          {value}%
+        </span>
+      </td>
+    );
+  }
 
   return (
     <td className="px-4 py-4 text-center">
-      <span
-        className={`inline-block px-3 py-1 text-sm font-semibold rounded-full border ${color}`}
-      >
+      <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full border bg-red-950/50 text-red-400 border-red-800">
         {value}%
       </span>
     </td>
