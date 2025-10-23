@@ -1,6 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { SyncButton } from "./SyncButton";
 import Link from "next/link";
+import {
+  MemberGrowthChart,
+  StatusDistributionChart,
+  RevenueByPlanChart,
+  EngagementLeaderboard,
+} from "./DashboardCharts";
 
 export default async function DashboardPage({
   params,
@@ -70,6 +76,19 @@ export default async function DashboardPage({
     take: 10,
   });
 
+  // Fetch all members for charts
+  const allMembers = await prisma.member.findMany({
+    where: { companyId: company.id },
+    select: {
+      id: true,
+      status: true,
+      totalRevenue: true,
+      engagementScore: true,
+      firstJoinedAt: true,
+      currentPlan: true,
+    },
+  });
+
   return (
     <div className="min-h-screen bg-zinc-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -102,6 +121,12 @@ export default async function DashboardPage({
                 className="pb-3 pt-3 px-6 text-zinc-500 hover:text-zinc-300 transition-colors"
               >
                 Automations
+              </Link>
+              <Link
+                href={`/dashboard/${companyId}/analytics`}
+                className="pb-3 pt-3 px-6 text-zinc-500 hover:text-zinc-300 transition-colors"
+              >
+                Analytics
               </Link>
             </nav>
           </div>
@@ -149,6 +174,48 @@ export default async function DashboardPage({
               existing members from Whop.
             </p>
             <SyncButton companyId={company.id} />
+          </div>
+        )}
+
+        {/* Charts Grid */}
+        {allMembers.length > 0 && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <MemberGrowthChart members={allMembers} />
+            <StatusDistributionChart members={allMembers} />
+            <RevenueByPlanChart members={allMembers} />
+            <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">
+                Quick Stats
+              </h3>
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-zinc-400">Avg. Revenue per Member</span>
+                  <span className="font-semibold text-white">
+                    $
+                    {(
+                      totalRevenue._sum.totalRevenue! / totalMembers || 0
+                    ).toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-zinc-400">Active Rate</span>
+                  <span className="font-semibold text-green-400">
+                    {((activeMembers / totalMembers) * 100).toFixed(1)}%
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-zinc-400">Total Members</span>
+                  <span className="font-semibold text-white">{totalMembers}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Engagement Leaderboard */}
+        {allMembers.length > 0 && (
+          <div className="mb-8">
+            <EngagementLeaderboard members={allMembers} />
           </div>
         )}
 

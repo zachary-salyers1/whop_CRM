@@ -4,7 +4,8 @@ type TriggerType =
   | "membership_created"
   | "membership_cancelled"
   | "payment_succeeded"
-  | "payment_failed";
+  | "payment_failed"
+  | "member_joined";
 
 type Action = {
   type: "add_tag" | "remove_tag" | "add_note" | "update_field";
