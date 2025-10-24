@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { validateCompanyAccess } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,11 +13,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!companyId) {
+      return NextResponse.json(
+        { error: "Company ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Validate company access
+    let validatedCompany;
+    try {
+      validatedCompany = await validateCompanyAccess(companyId, true);
+    } catch (error: any) {
+      console.error("Company validation error:", error.message);
+      return NextResponse.json(
+        { error: "Access denied: Invalid company ID" },
+        { status: 403 }
+      );
+    }
+
     // Verify members belong to this company before deleting
     const members = await prisma.member.findMany({
       where: {
         id: { in: memberIds },
-        company: { whopCompanyId: companyId },
+        companyId: validatedCompany.id,
       },
     });
 

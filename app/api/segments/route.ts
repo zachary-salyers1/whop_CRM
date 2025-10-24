@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { validateCompanyAccess } from "@/lib/auth";
 
 type Filter = {
   field: string;
@@ -53,17 +54,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify company exists
-    const company = await prisma.company.findUnique({
-      where: { id: companyId },
-    });
-
-    if (!company) {
+    // Validate company access
+    let validatedCompany;
+    try {
+      validatedCompany = await validateCompanyAccess(companyId, true);
+    } catch (error: any) {
+      console.error("Company validation error:", error.message);
       return NextResponse.json(
-        { error: "Company not found" },
-        { status: 404 }
+        { error: "Access denied: Invalid company ID" },
+        { status: 403 }
       );
     }
+
+    // Use validated company ID for database operations
+    const companyDbId = validatedCompany.id;
 
     // Build where clause from filters
     const whereClause = buildWhereClause(filters);
@@ -71,7 +75,7 @@ export async function POST(request: NextRequest) {
     // Count matching members
     const memberCount = await prisma.member.count({
       where: {
-        companyId,
+        companyId: companyDbId,
         ...whereClause,
       },
     });
@@ -79,7 +83,7 @@ export async function POST(request: NextRequest) {
     // Calculate total MRR for matching members
     const members = await prisma.member.findMany({
       where: {
-        companyId,
+        companyId: companyDbId,
         ...whereClause,
       },
       select: {
@@ -94,7 +98,7 @@ export async function POST(request: NextRequest) {
       data: {
         name,
         description: description || "",
-        companyId,
+        companyId: companyDbId,
         filters: filters,
         memberCount,
         totalMrr,

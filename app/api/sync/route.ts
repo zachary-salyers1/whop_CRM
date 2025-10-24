@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { whopSdk } from "@/lib/whop-sdk";
+import { validateCompanyAccess } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,9 +14,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get company from database
+    // Validate company access (ensures companyId matches configured company)
+    let validatedCompany;
+    try {
+      validatedCompany = await validateCompanyAccess(companyId, true);
+    } catch (error: any) {
+      console.error("Company validation error:", error.message);
+      return NextResponse.json(
+        { error: "Access denied: Invalid company ID" },
+        { status: 403 }
+      );
+    }
+
+    // Get full company from database
     const company = await prisma.company.findUnique({
-      where: { id: companyId },
+      where: { id: validatedCompany.id },
     });
 
     if (!company) {

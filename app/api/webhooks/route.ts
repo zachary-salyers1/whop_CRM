@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { executeAutomations } from "@/lib/automationEngine";
 import { updateMemberInsights } from "@/lib/aiInsights";
+import { validateWebhookCompany } from "@/lib/auth";
 
 const validateWebhook = makeWebhookValidator({
 	webhookSecret: process.env.WHOP_WEBHOOK_SECRET ?? "fallback",
@@ -60,17 +61,21 @@ async function handleWebhook(webhookData: any) {
 }
 
 async function handleMembershipCreated(data: any) {
-	const { id, user, plan, valid, quantity, renewal_period_start, renewal_period_end } = data;
+	const { id, user, plan, valid, quantity, renewal_period_start, renewal_period_end, company_id } = data;
 
-	// Find company (we'll need to get this from the plan or membership data)
-	// For now, we'll get the first company - in production you'd match by plan owner
-	const company = await prisma.company.findFirst({
-		where: { isActive: true },
-	});
-
-	if (!company) {
-		console.error("No active company found for membership");
+	// Validate and get company from webhook payload
+	// This ensures webhooks are only processed for the configured company
+	if (!company_id) {
+		console.error("Webhook missing company_id, skipping");
 		return;
+	}
+
+	let company;
+	try {
+		company = await validateWebhookCompany(company_id);
+	} catch (error) {
+		console.error("Webhook company validation failed:", error);
+		return; // Silently ignore webhooks for other companies
 	}
 
 	// Create or update member
@@ -275,17 +280,22 @@ async function handlePaymentFailed(data: any) {
 
 async function handleFreeMemberJoined(data: any) {
 	const user = data.user || data;
+	const company_id = data.company_id;
 
 	if (!user || !user.id) return;
 
-	// Find company
-	const company = await prisma.company.findFirst({
-		where: { isActive: true },
-	});
-
-	if (!company) {
-		console.error("No active company found");
+	// Validate and get company from webhook payload
+	if (!company_id) {
+		console.error("Webhook missing company_id, skipping");
 		return;
+	}
+
+	let company;
+	try {
+		company = await validateWebhookCompany(company_id);
+	} catch (error) {
+		console.error("Webhook company validation failed:", error);
+		return; // Silently ignore webhooks for other companies
 	}
 
 	// Create member with inactive status (no paid plan)

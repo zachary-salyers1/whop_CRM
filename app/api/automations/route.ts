@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { validateCompanyAccess } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,15 +14,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify company exists
-    const company = await prisma.company.findUnique({
-      where: { id: companyId },
-    });
-
-    if (!company) {
+    // Validate company access
+    let validatedCompany;
+    try {
+      validatedCompany = await validateCompanyAccess(companyId, true);
+    } catch (error: any) {
+      console.error("Company validation error:", error.message);
       return NextResponse.json(
-        { error: "Company not found" },
-        { status: 404 }
+        { error: "Access denied: Invalid company ID" },
+        { status: 403 }
       );
     }
 
@@ -30,7 +31,7 @@ export async function POST(request: NextRequest) {
       data: {
         name,
         description: description || "",
-        companyId,
+        companyId: validatedCompany.id,
         trigger,
         actions,
         isActive: true,
