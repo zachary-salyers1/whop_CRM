@@ -150,6 +150,12 @@ export default async function DashboardPage({
               >
                 Analytics
               </Link>
+              <Link
+                href={`/dashboard/${companyId}/prospects`}
+                className="pb-3 pt-3 px-6 text-zinc-500 hover:text-zinc-300 transition-colors"
+              >
+                Prospects
+              </Link>
             </nav>
           </div>
         </div>

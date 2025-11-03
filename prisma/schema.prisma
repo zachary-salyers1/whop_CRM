@@ -35,6 +35,9 @@ model Company {
   notes             Note[]
   tags              Tag[]
   dashboardInsights DashboardInsight[]
+  prospects         Prospect[]
+  conversations     Conversation[]
+  followUpReminders FollowUpReminder[]
 
   @@index([whopCompanyId])
 }
@@ -282,4 +285,139 @@ model DashboardInsight {
 
   @@index([companyId, isActive])
   @@index([generatedAt])
+}
+
+// Prospect - Potential community owner (B2B lead)
+model Prospect {
+  id              String   @id @default(cuid())
+
+  companyId       String
+  company         Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  // Prospect information
+  name            String
+  email           String?
+  whopUserId      String?  // If they have a Whop account
+  profilePicUrl   String?
+
+  // Community details
+  communityName   String?
+  communitySize   Int?     // Number of members
+  platform        String?  // Discord, Telegram, Slack, etc.
+  niche           String?  // Gaming, Fitness, Education, etc.
+
+  // Lead status
+  status          String   @default("new") // new, contacted, follow_up_needed, negotiating, converted, dead
+  priority        String   @default("medium") // low, medium, high, urgent
+
+  // Contact info
+  whopDmUrl       String?  // URL to Whop DM conversation
+  discordHandle   String?
+  twitterHandle   String?
+
+  // Metadata
+  notes           String?  // Quick notes about the prospect
+  tags            String[] // Array of tags
+  metadata        Json?    // Additional custom fields
+
+  convertedAt     DateTime? // When they installed the app
+  convertedToCompanyId String? // If they became a customer
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  conversations     Conversation[]
+  followUpReminders FollowUpReminder[]
+
+  @@index([companyId])
+  @@index([status])
+  @@index([priority])
+  @@index([email])
+  @@index([createdAt])
+}
+
+// Conversation - DM thread with a prospect
+model Conversation {
+  id              String   @id @default(cuid())
+
+  prospectId      String
+  prospect        Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
+
+  companyId       String
+  company         Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  // Conversation details
+  title           String   // Brief description of conversation topic
+  status          String   @default("open") // open, closed, archived
+
+  // Message stats
+  messageCount    Int      @default(0)
+  lastMessage     String?  // Preview of last message
+  lastMessageAt   DateTime?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  messages        ConversationMessage[]
+
+  @@index([prospectId])
+  @@index([companyId])
+  @@index([status])
+  @@index([lastMessageAt])
+}
+
+// ConversationMessage - Individual message in a conversation
+model ConversationMessage {
+  id              String   @id @default(cuid())
+
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // Message content
+  content         String   @db.Text
+  sender          String   // "user" or "prospect"
+  senderName      String?  // Name of sender for display
+
+  // Metadata
+  metadata        Json?    // Attachments, reactions, etc.
+
+  sentAt          DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  @@index([conversationId])
+  @@index([sentAt])
+}
+
+// FollowUpReminder - Reminders for following up with prospects
+model FollowUpReminder {
+  id              String   @id @default(cuid())
+
+  prospectId      String
+  prospect        Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
+
+  companyId       String
+  company         Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  // Reminder details
+  title           String
+  description     String?
+  dueAt           DateTime
+
+  // Status
+  status          String   @default("pending") // pending, completed, dismissed
+  notified        Boolean  @default(false) // Whether notification was sent
+  notifiedAt      DateTime?
+
+  completedAt     DateTime?
+  completedBy     String?  // user_xxx who completed it
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([prospectId])
+  @@index([companyId])
+  @@index([status])
+  @@index([dueAt])
 }
